@@ -8,10 +8,19 @@ Playlist::Playlist(const std::string& name)
 }
 // TODO: Fix memory leaks!
 // Students must fix this in Phase 1
-Playlist::~Playlist() {
+Playlist::~Playlist() { // DESTRUCTOR
     #ifdef DEBUG
     std::cout << "Destroying playlist: " << playlist_name << std::endl;
     #endif
+    /*
+
+    */
+    PlaylistNode* this_track = head;
+    while (this_track != nullptr) {
+        PlaylistNode* next = this_track->next;
+        delete this_track;
+        this_track = next;
+    }
 }
 
 void Playlist::add_track(AudioTrack* track) {
@@ -51,8 +60,9 @@ void Playlist::remove_track(const std::string& title) {
         }
 
         track_count--;
+        //abcde
+        delete current;
         std::cout << "Removed '" << title << "' from playlist" << std::endl;
-
     } else {
         std::cout << "Track '" << title << "' not found in playlist" << std::endl;
     }
@@ -100,7 +110,6 @@ AudioTrack* Playlist::find_track(const std::string& title) const {
         }
         current = current->next;
     }
-
     return nullptr;
 }
 
@@ -112,7 +121,6 @@ int Playlist::get_total_duration() const {
         total += current->track->get_duration();
         current = current->next;
     }
-
     return total;
 }
 
