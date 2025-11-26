@@ -157,6 +157,94 @@ void demonstrate_polymorphism() {
         std::cout << std::endl;
     }
 }
+
+void test_phase_4_findLRU() {
+    std::cout << "\n======== PHASE 4: findLRUSlot() TESTING ========" << std::endl;
+
+    // Create a cache with 3 slots
+    LRUCache cache(3);
+
+    // Create dummy tracks with unique titles
+    PointerWrapper<AudioTrack> track0(new MP3Track("T0", {"Artist0"}, 100, 120, 128));
+    PointerWrapper<AudioTrack> track1(new MP3Track("T1", {"Artist1"}, 100, 120, 128));
+
+    // -------------------------
+    // Scenario 1: [0:100, 1:50, 2:empty]
+    // -------------------------
+    cache.slots[0].store(std::move(track0), 100);
+    cache.slots[1].store(std::move(track1), 50);
+    // Slot 2 is empty
+    size_t lru1 = cache.findLRUSlot();
+    std::cout << "Scenario 1 LRU index: " << lru1
+              << " (expected 1)" << std::endl;
+
+    // -------------------------
+    // Scenario 2: [0:empty, 1:empty]
+    // -------------------------
+    cache.slots[0].clear();
+    cache.slots[1].clear();
+    size_t lru2 = cache.findLRUSlot();
+    std::cout << "Scenario 2 LRU index: " << lru2
+              << " (expected " << cache.max_size << ")" << std::endl;
+
+    // -------------------------
+    // Scenario 3: [0:100, 1:200]
+    // -------------------------
+    PointerWrapper<AudioTrack> track2(new MP3Track("T2", {"Artist2"}, 100, 120, 128));
+    PointerWrapper<AudioTrack> track3(new MP3Track("T3", {"Artist3"}, 100, 120, 128));
+    cache.slots[0].store(std::move(track2), 100);
+    cache.slots[1].store(std::move(track3), 200);
+    size_t lru3 = cache.findLRUSlot();
+    std::cout << "Scenario 3 LRU index: " << lru3
+              << " (expected 0)" << std::endl;
+
+    std::cout << "findLRUSlot() test complete!\n" << std::endl;
+}
+
+void test_phase_4_put() {
+    std::cout << "\n======== PHASE 4: put() TESTING ========" << std::endl;
+
+    LRUCache cache(2); // capacity 2
+    std::cout << "Created LRUCache with capacity 2.\n";
+
+    // Helper to create PointerWrapper<AudioTrack> from MP3Track
+    auto make_audio_track = [](const std::string& title, const std::vector<std::string>& artists,
+                               int duration, int bpm, int kbps) {
+        return PointerWrapper<AudioTrack>(new MP3Track(title, artists, duration, bpm, kbps));
+    };
+
+    // Scenario 1: Empty cache, insert A
+    auto trackA = make_audio_track("A", {"ArtistA"}, 180, 120, 320);
+    bool evicted = cache.put(std::move(trackA));
+    std::cout << "Inserted A, eviction occurred? " << (evicted ? "Yes" : "No") << " (expected No)\n";
+    cache.displayStatus();
+
+    // Scenario 2: Insert B
+    auto trackB = make_audio_track("B", {"ArtistB"}, 200, 128, 256);
+    evicted = cache.put(std::move(trackB));
+    std::cout << "Inserted B, eviction occurred? " << (evicted ? "Yes" : "No") << " (expected No)\n";
+    cache.displayStatus();
+
+    // Scenario 3: Cache full, insert C → should evict LRU (A)
+    auto trackC = make_audio_track("C", {"ArtistC"}, 240, 130, 192);
+    evicted = cache.put(std::move(trackC));
+    std::cout << "Inserted C (cache full), eviction occurred? " << (evicted ? "Yes" : "No") << " (expected Yes)\n";
+    cache.displayStatus();
+
+    // Scenario 4: Insert C again → already exists? update access time, no eviction
+    auto trackC2 = make_audio_track("C", {"ArtistC"}, 180, 120, 320);
+    evicted = cache.put(std::move(trackC2));
+    std::cout << "Inserted C again, eviction occurred? " << (evicted ? "Yes" : "No") 
+              << " (expected No, updates MRU)\n";
+    cache.displayStatus();
+
+    std::cout << "put() test complete!\n";
+}
+
+
+
+
+
 int main(int argc, char* argv[]) {    
     /**
      * Command-line argument parsing
@@ -189,7 +277,9 @@ int main(int argc, char* argv[]) {
         // Test each phase individually
         //test_phase_1_memory_leaks();
         //test_phase_2_rule_of_5();
-        test_phase_3();
+        //test_phase_3();
+        test_phase_4_findLRU(); //change fields to public
+        test_phase_4_put();
         //demonstrate_polymorphism();
         std::cout << "\n(Set 'run_software' to true in main.cpp to run the full interactive session.)\n" << std::endl;
     }

@@ -21,7 +21,7 @@
  * - put() inserts as MRU and evicts true LRU when full.
  */
 class LRUCache {
-private:
+public:
     std::vector<CacheSlot> slots;
     size_t max_size;
     uint64_t access_counter;
@@ -96,6 +96,9 @@ public:
      * This method should be used only once.
      */
     void set_capacity(size_t capacity);
+
+
+    size_t findLRUSlot() const; 
 private:
     /**
      * @brief Find slot containing specific track
@@ -108,7 +111,7 @@ private:
      * @brief Find the least recently used slot
      * @return Slot index of LRU entry
      */
-    size_t findLRUSlot() const;
+    //size_t findLRUSlot() const;  
     
     /**
      * @brief Find first empty slot
