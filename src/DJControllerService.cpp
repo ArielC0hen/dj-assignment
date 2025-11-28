@@ -23,8 +23,8 @@ int DJControllerService::loadTrackToCache(AudioTrack& track) {
     clone->load();
     clone->analyze_beatgrid();
     PointerWrapper<AudioTrack> newTrack (clone);
-    if (cache.put(newTrack)) { // eviction
-        return -1;
+    if (cache.put(std::move(newTrack))) { // transfer ownership
+        return -1;  // eviction
     } else {
         return 0;
     }

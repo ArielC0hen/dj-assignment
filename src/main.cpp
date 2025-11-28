@@ -278,9 +278,9 @@ int main(int argc, char* argv[]) {
         //test_phase_1_memory_leaks();
         //test_phase_2_rule_of_5();
         //test_phase_3();
-        test_phase_4_findLRU(); //change fields to public
-        test_phase_4_put();
-        //demonstrate_polymorphism();
+        //test_phase_4_findLRU(); //change fields to public
+        //test_phase_4_put();
+        demonstrate_polymorphism();
         std::cout << "\n(Set 'run_software' to true in main.cpp to run the full interactive session.)\n" << std::endl;
     }
     return 0;
