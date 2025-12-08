@@ -6,6 +6,26 @@ Playlist::Playlist(const std::string& name)
     : head(nullptr), playlist_name(name), track_count(0) {
     std::cout << "Created playlist: " << name << std::endl;
 }
+
+/*
+// shallow aval lo ehpat li ki ani lo mistamesh beze, ze rak kedei lehorid et hawarnings
+Playlist::Playlist(const Playlist& other) : head(nullptr) {
+    if(other.head != nullptr) {
+        head = new PlaylistNode(*other.head);
+    }
+}
+
+Playlist& Playlist:: operator=(const Playlist& other) {
+    if (this != &other) {
+        delete this.head;
+        if (other.head != nullptr) {
+            this.head = new PlaylistNode(*other.head);
+        }
+    }
+    return *this;
+}
+*/
+
 // TODO: Fix memory leaks!
 // Students must fix this in Phase 1
 Playlist::~Playlist() { // DESTRUCTOR
@@ -31,7 +51,7 @@ void Playlist::add_track(AudioTrack* track) {
     }
 
     // Create new node - this allocates memory!
-    PlaylistNode* new_node = new PlaylistNode(track);
+    PlaylistNode* new_node = new PlaylistNode{track,nullptr};
 
     // Add to front of list
     new_node->next = head;

@@ -19,7 +19,26 @@ struct PlaylistNode {
     AudioTrack* track; 
     PlaylistNode* next;
 
-    PlaylistNode(AudioTrack* t) : track(t), next(nullptr) {}
+    /*
+    PlaylistNode(const PlaylistNode& other)
+        : track(other.track), next(nullptr) {
+        if (other.next != nullptr) {
+            next = new PlaylistNode(*other.next);
+        }
+    }
+
+    PlaylistNode& operator=(const PlaylistNode& other) {
+        if (this != &other) {
+            delete next;
+            track = other.track;
+            next = nullptr;
+            if (other.next != nullptr) {
+                next = new PlaylistNode(*other.next);
+            }
+        }
+        return *this;
+    }
+    */
     ~PlaylistNode() {};
 };
 

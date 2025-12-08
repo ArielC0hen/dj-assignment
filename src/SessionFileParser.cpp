@@ -6,6 +6,7 @@
 // ========== PUBLIC METHODS (PROVIDED FOR STUDENTS) ==========
 
 bool SessionFileParser::parse_config_file(const std::string& config_path, SessionConfig& config) {
+    std::cout << "HERE " << std::endl;
     std::ifstream file(config_path);
     
     if (!file.is_open()) {

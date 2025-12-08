@@ -17,6 +17,33 @@ private:
     int bpm_tolerance;
 public:
     MixingEngineService();
+
+    /*
+
+    // (for fixing the warnings)
+    MixingEngineService(const MixingEngineService& other) {
+        for (int i = 0; i < 2; i++) {
+            if (other.decks[i])
+                decks[i] = other.decks[i]->clone().release();
+            else
+                decks[i] = nullptr;
+        }
+    }
+    
+    MixingEngineService& operator=(const MixingEngineService& other) {
+        if (this != &other) {
+            for (int i = 0; i < 2; i++) {
+                delete decks[i];
+                if (other.decks[i])
+                    decks[i] = other.decks[i]->clone().release();
+                else
+                    decks[i] = nullptr;
+            }
+        }
+        return *this;
+    }
+    */
+
     ~MixingEngineService();
 
     /** Contract: Load a track to the next deck per instant-transition policy
