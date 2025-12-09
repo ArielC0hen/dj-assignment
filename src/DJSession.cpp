@@ -29,7 +29,7 @@ DJSession::~DJSession() {
 
 // ========== CORE FUNCTIONALITY ==========
 bool DJSession::load_playlist(const std::string& playlist_name)  {
-    std::cout << "[System] Loading playlist: " << playlist_name << "\n";
+    std::cout << "[System] Loading playlist: '" << playlist_name << "'\n";
     
     // Find the playlist in the session config
     auto it = session_config.playlists.find(playlist_name);
@@ -46,7 +46,7 @@ bool DJSession::load_playlist(const std::string& playlist_name)  {
     }
     
     track_titles = library_service.getTrackTitles();
-    std::reverse(track_titles.begin(), track_titles.end());
+    //std::reverse(track_titles.begin(), track_titles.end());
     return true;
 }
 
@@ -80,12 +80,12 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
         stats.errors++;
         return 0;
     }
-    std::cout << "[System] Loading track " << track_name <<" to controller..." << std::endl;   
+    std::cout << "[System] Loading track '" << track_name <<"' to controller..." << std::endl;   
     int cache = controller_service.loadTrackToCache(*track);
     if (cache == 1) {
         stats.cache_hits++;
     } else if (cache == 0) {
-        stats.cache_misses++;
+        stats.cache_misses++;       
     } else { //-1
        stats.cache_misses++;
        stats.cache_evictions++; 
@@ -168,8 +168,8 @@ void DJSession::simulate_dj_performance() {
                 std::cout << "\n-- Processing: " << track_title << "--" << std::endl;
                 stats.tracks_processed++;
                 load_track_to_controller(track_title); // updates
-                if (!load_track_to_mixer_deck(track_title)) {continue;} // updates
                 controller_service.displayCacheStatus();
+                if (!load_track_to_mixer_deck(track_title)) {continue;} // updates
                 mixing_service.displayDeckStatus();
             }
             print_session_summary();
@@ -191,8 +191,8 @@ void DJSession::simulate_dj_performance() {
                 std::cout << "\n-- Processing: " << track_title << "--" << std::endl;
                 stats.tracks_processed++;
                 load_track_to_controller(track_title); // updates
-                if (!load_track_to_mixer_deck(track_title)) {continue;} // updates
                 controller_service.displayCacheStatus();
+                if (!load_track_to_mixer_deck(track_title)) {continue;} // updates
                 mixing_service.displayDeckStatus();
             }
             print_session_summary();

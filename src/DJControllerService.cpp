@@ -12,8 +12,10 @@ DJControllerService::DJControllerService(size_t cache_size)
 int DJControllerService::loadTrackToCache(AudioTrack& track) {
     if (cache.contains(track.get_title())) {
         cache.get(track.get_title());
+        std::cout << "[Cache HIT] " << track.get_title() <<" found in cache. Refereshing MRU state." << std::endl;
         return 1;
     }
+    std::cout << "[Cache MISS] Cloning track into cache: " << track.get_title() << std::endl; 
     PointerWrapper<AudioTrack> cloneWrapper = track.clone();
     AudioTrack* clone = cloneWrapper.release();
     if (clone == nullptr) {

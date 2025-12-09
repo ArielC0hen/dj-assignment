@@ -100,7 +100,7 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
         trackWrapper->load();
         trackWrapper->analyze_beatgrid();
         playlist.add_track(trackWrapper.release());
-        std::cout << "Added " << track->get_title() << " to playlist "<< playlist.get_name() << "\n"<<std::endl;        
+        //std::cout << "Added " << track->get_title() << " to playlist "<< playlist.get_name() << "\n"<<std::endl;        
     }    
     //(void)playlist_name;  // Suppress unused parameter warning
     //(void)track_indices;  // Suppress unused parameter warning
