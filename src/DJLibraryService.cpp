@@ -85,9 +85,11 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
     // Your implementation here
     // For now, add a placeholder to fix the linker error
     std::cout << "[INFO] Loading playlist: " << playlist_name << "\n" << std::endl;
+    std::cout << "BANANA" << std::endl;
     playlist = Playlist(playlist_name);
+    std::cout << "KREMBO" << std::endl;
     for (const auto& i : track_indices) {
-        if (i > library.size()) {
+        if (static_cast<size_t>(i) > library.size()) {
             std::cout << "[WARNING] Invalid track index: " << i << "\n" << std::endl;
             continue;            
         }

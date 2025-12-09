@@ -7,24 +7,47 @@ Playlist::Playlist(const std::string& name)
     std::cout << "Created playlist: " << name << std::endl;
 }
 
-/*
+
 // shallow aval lo ehpat li ki ani lo mistamesh beze, ze rak kedei lehorid et hawarnings
-Playlist::Playlist(const Playlist& other) : head(nullptr) {
-    if(other.head != nullptr) {
-        head = new PlaylistNode(*other.head);
+Playlist::Playlist(const Playlist& other) : head(nullptr), playlist_name(other.get_name()), track_count(other.get_track_count()) {
+    if (other.head != nullptr) {
+        head = new PlaylistNode(other.head->track->clone().release());
+        PlaylistNode* thisNode = head;
+        PlaylistNode* otherNodeNext = other.head->next;
+        while (otherNodeNext != nullptr) {
+            thisNode->next = new PlaylistNode(otherNodeNext->track->clone().release());
+            thisNode = thisNode->next;
+            otherNodeNext = otherNodeNext->next;
+        }
     }
 }
 
 Playlist& Playlist:: operator=(const Playlist& other) {
     if (this != &other) {
-        delete this.head;
+        PlaylistNode* deleteNode = head;
+        head = nullptr;
+        while(deleteNode != nullptr) {
+            PlaylistNode* next = deleteNode->next;
+            delete deleteNode->track;
+            delete deleteNode;
+            deleteNode = next;
+        }
+        playlist_name = other.get_name();
+        track_count = other.get_track_count();
         if (other.head != nullptr) {
-            this.head = new PlaylistNode(*other.head);
+            head = new PlaylistNode(other.head->track->clone().release()); 
+            PlaylistNode* thisNode = head;
+            PlaylistNode* otherNodeNext = other.head->next;
+            while (otherNodeNext != nullptr) {
+                thisNode->next = new PlaylistNode(otherNodeNext->track->clone().release());
+                thisNode = thisNode->next;
+                otherNodeNext = otherNodeNext->next;
+            }
         }
     }
     return *this;
 }
-*/
+
 
 // TODO: Fix memory leaks!
 // Students must fix this in Phase 1
@@ -51,7 +74,7 @@ void Playlist::add_track(AudioTrack* track) {
     }
 
     // Create new node - this allocates memory!
-    PlaylistNode* new_node = new PlaylistNode{track,nullptr};
+    PlaylistNode* new_node = new PlaylistNode(track);
 
     // Add to front of list
     new_node->next = head;

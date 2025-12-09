@@ -14,9 +14,11 @@ private:
     AudioTrack* decks[2];
     size_t active_deck;
     bool auto_sync;
-    int bpm_tolerance;
+    int bpm_tolerance;    
 public:
     MixingEngineService();
+    MixingEngineService(const MixingEngineService&) = delete;
+    MixingEngineService& operator=(const MixingEngineService&) = delete;
 
     /*
 

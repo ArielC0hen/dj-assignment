@@ -18,6 +18,25 @@
 struct PlaylistNode {
     AudioTrack* track; 
     PlaylistNode* next;
+    
+    PlaylistNode(const PlaylistNode& other) : track(nullptr), next(nullptr) {
+        if (other.track != nullptr) {
+            track = other.track->clone().release();
+        }
+    }
+
+    PlaylistNode& operator=(const PlaylistNode& other) {
+        if (this != &other) {
+            delete track;
+            if (other.track != nullptr) {
+                track = other.track->clone().release();
+            } else {
+                track = nullptr;
+            }
+        }
+        return *this;
+    }
+    
 
     /*
     PlaylistNode(const PlaylistNode& other)
@@ -39,6 +58,7 @@ struct PlaylistNode {
         return *this;
     }
     */
+    PlaylistNode(AudioTrack* t) : track(t), next(nullptr) {}
     ~PlaylistNode() {};
 };
 
@@ -53,6 +73,10 @@ public:
      * Constructor
      */
     Playlist(const std::string& name="");
+
+    ///there is no getNext in playlistNode and no getHead in Playlist so ill guess its not supposed to support deep copy
+    Playlist(const Playlist&);
+    Playlist& operator=(const Playlist&);
 
     /**
      * Destructor
@@ -104,6 +128,8 @@ public:
      * Get all tracks as a vector
      */
     std::vector<AudioTrack*> getTracks() const;
+
+    int get_head() const;
 
 };
 
